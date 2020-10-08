@@ -6,7 +6,8 @@ import statistics as st
 
 
 # img = cv.imread('./data/example.png')
-img = cv.imread('./data/example_1.jpeg')
+# img = cv.imread('./data/example_1.jpeg')
+img = cv.imread('./data/smoking.png')
 img_thr = img.copy()
 
 # by 김주희_그레이스케일 영상으로 변 _200701
@@ -52,13 +53,15 @@ rect_center = []
 center_point = []
 center_sort = []
 dst = []
-gradients = []
+
+box = []
 
 # by 김주희_검출된 contour에 대해 점자인 것과 아닌 것을 구분하여 표시 _200702
 for i in range(len(contours)):
     cnt = contours[i]
     area = cv.contourArea(cnt)
     x, y, w, h = cv.boundingRect(cnt)
+
 
     # by 김주희_contour 면적 _200702
     rect_area = w * h
@@ -80,6 +83,7 @@ for i in range(len(contours)):
     #   점자에 대한 contour를 찾는 과정_가로 세로 비율이 1:1에서 크게 벗어난 것을 제외하고 표시
     # if(aspect_ratio>0.8)and(aspect_ratio<1.5)and(f <= float(f)*0.7):
     if (aspect_ratio > 0.5) and (aspect_ratio < 2.0):
+        box.append(cv.boundingRect(cnt))
         cv.rectangle(closing, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
         # by 김주희_moments를 이용하여 중심점 표_200702
@@ -94,96 +98,58 @@ for i in range(len(contours)):
             rect_center = rect_center + [cx, cy]
 
 
-print(center_point[0:5])
+print(box)
+print(box[0][1])
 
-# by_김주희_중심점을 x값을 기준으로 정렬 _200819
-center_point.sort()
-print(len(center_point))
-print(center_point[0:5])
+box.sort()
+print(box)
+print(box[0][1])
+# len(box)
+count = [0 for i in range(len(box))]
+print(count)
+# count.shape()
 
-g_d = [0 for i in range(len(center_point)-1)]
-for i in range(len(center_point)-1):
-    x_increase = center_point[i+1][0]-center_point[i][0]
-    y_increase = center_point[i+1][1]-center_point[i][1]
+#by_김주희__200904
+start = 0
+for i in range(len(box)-1):
+    d = box[i + 1][0] - box[i][0]
+    # 점의 x값의 위치와 가로의 길이모두 일정 범위 안에 있는지 점검
+    if box[i][2]-7<box[i+1][2]<box[i][2]+7:
+        if box[i][0]-5<box[i+1][0]<box[i][0]+5:
+            count[start] = count[start] + 1.0
+            cv.circle(closing, (center_point[i][0], center_point[i][1]), 5, (0, 255, 255), -1)
+        elif 60<d<70 or 130<d<140:
+            count[start] = count[start] + 1.0
+            cv.circle(closing, (center_point[i][0], center_point[i][1]), 5, (0, 255, 255), -1)
 
-    # 김주희_중심값간의 거리 구하기 _200827
-    # 김주희_ 중심의 x값 간의 차이 범위
-
-    # x값의 거리만 고려
-    if (0 <= (x_increase % 65) <= 10) or (0 <= (x_increase % 110) <= 10) or (0 <= (x_increase % 175) <= 10):
-        g_d[i] = g_d[i] + 1         # 거리가 일정 범위 안에 있으면 1증가
-        if 0 <= (y_increase % 55) <= 10:
-            g_d[i] = g_d[i] + 1
-             # cv.circle(closing, (center_point[i][0], center_point[i][1]), 5, (0, 255, 255), -1)
-        # if x_increase != 0:
-        #     m = abs(y_increase / x_increase)
-        #     if (m <= 0.25) or (m >= 4):
-        #         cv.circle(closing, (center_point[i][0], center_point[i][1]), 5, (0, 255, 255), -1)
-    if x_increase != 0:
-        m = abs(y_increase / x_increase)
-        if (m <= 0.25) or (m >= 4):
-            g_d[i] = g_d[i] + 1
-
-    if g_d[i] == 3 or g_d[i] == 2:
-        cv.circle(closing, (center_point[i][0], center_point[i][1]), 5, (0, 255, 255), -1)
+    else:
+        start = i
     #
-    # if (0 <= (x_increase % 65) <= 10) or (0 <= (y_increase % 50) <=10) or (0 <= (x_increase % 110) <= 10):
-    #     g_d[i] = g_d[i] + 1         # 거리가 일정 범위 안에 있으면 1증가
-    #     # if 0 <= (y_increase % 55) <= 10:
-    #     # cv.circle(closing, (center_point[i][0], center_point[i][1]), 5, (0, 255, 255), -1)
-    #     if x_increase != 0:
-    #         m = abs(y_increase / x_increase)
-    #         if (m <= 0.25) or (m >= 4):
-    #             cv.circle(closing, (center_point[i][0], center_point[i][1]), 5, (0, 255, 255), -1)
-        #         gradients.append(m)
-        #     else:
-        #         m = 0
-        #     if (x_increase < 10) & (y_increase > 50):
-        #         m = 0  # x좌표가 근접한 점들의 기울
-        #     else:
-        #         m = abs(y_increase / x_increase)
-        # else:
-        #     m = 0
-        # gradients.append(m)
-
-
-
-    # if x_increase != 0:
-    #     if (x_increase < 10) & (y_increase > 50):
-    #         m = 0   # x좌표가 근접한 점들의 기울
-    #     else:
-    #         m = abs(y_increase / x_increase)
+    # # 점의 x값의 위치와 가로의 길이모두 일정 범위 안에 있는지 점검
+    # if box[i][0]-5<box[i+1][0]<box[i][0]-5 and box[i][2]-5<box[i+1][2]<box[i][2]+5:
+    #     count[start] = count[start] + 1.0
+    #     cv.circle(closing, (center_point[i][0], center_point[i][1]), 5, (0, 255, 255), -1)
+    # # x값의 차이가 바로 옆 점자 혹은 다음 글자인지 확인
+    # elif 60<d<70 or 130<d<140:
+    #     count[start] = count[start] + 1.0
+    #     cv.circle(closing, (center_point[i][0], center_point[i][1]), 5, (0, 255, 255), -1)
     # else:
-    #     m = 0
-    # gradients.append(m)
-
-print(center_point[100][1])
-print(center_point[0][0])
-print('기울기 : ', gradients)
-
-# by_김주희_기울기 리스트를 array로 변환 _200819
-gradients = np.array(gradients)
+    #     start = i
 
 
-# 김주희_중심값간의 거리로 구분하기 _200827
-# for i in range(len(center_point)-1):
-# #
+print(count)
 
 
-# by_김주희_기울기가 큰 것 제외  _200819
-# gradients = np.where(gradients > 1.5 , -1, gradients)
-# gradients = np.where(gradients < 1. , -1, gradients)
+#
+# for i in range(len(box)): ##Buble Sort on python
+#     for j in range(len(box)-(i+1)):
+#         if box[j][0]>box[j+1][0]:
+#             temp=box[j]
+#             box[j]=box[j+1]
+#             box[j+1]=temp
+# print(box)
+# print(box[0][1])
 
-# by_김주희_기울기가 큰 것 제외  _200827
-# gradients = np.where(gradients > -5 and gradients < -1, -1, gradients)
-
-print(gradients)
-# print(np.where(-0.5<= gradients <= 0.5, -1, gradients))
-
-# 김주희_기울기가 범위 안에 있으면 중심 값 표시_
-for i in range(len(gradients)):
-    if gradients[i] != -1:
-        cv.circle(closing, (center_point[i][0], center_point[i][1]), 5, (0, 255, 255), -1)
 
 
 # by_김주희_기울기 및 거리 구하기_200819
@@ -234,12 +200,16 @@ for i in range(sort_center.shape[0]):
 
 # plt.subplot(132)
 plt.imshow(closing, cmap='gray')
+# plt.xlabel('장애인전')
 plt.title('closing')
 plt.axis('off')
 
+print()
+print('result : 장애인 전용 ')
 # plt.subplot(133)
 # plt.imshow(img_line, cmap='gray')
 # plt.title('image with line')
 # plt.axis('off')
 
 plt.show()
+
