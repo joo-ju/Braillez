@@ -1,6 +1,7 @@
 import numpy as np
 import cv2 as cv
 import matplotlib.pyplot as plt
+import math
 from collections import Counter
 import statistics as st
 
@@ -65,8 +66,20 @@ print(thr.shape)
 kernel = np.ones((3, 3), np.uint8)
 closing = cv.morphologyEx(thr, cv.MORPH_CLOSE, kernel)
 
+# by 배아랑이_201012
+# 이미지의 가장자리 일정 부분은 하얗게 만든다. -> 그림 잘라 버리기
+# 그림의 가로세로 길이의 8분의 1 정도만 가장자리를 검게 바꿔준다.
+cut_num = [(int)(closing.shape[0]/8), (int)(closing.shape[1]/8)]
+print(cut_num)
+closing[:cut_num[0], :] = 125
+closing[-cut_num[0]:, :] = 125
+closing[:, :cut_num[1]] = 125
+closing[:, -cut_num[1]:] = 125
+
+
 # closing = cv.morphologyEx(y2, cv.MORPH_CLOSE, kernel)
 contours, _ = cv.findContours(closing[:, :, 0], cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
+center=[]
 for i in range(len(contours)):
     cnt = contours[i]
     area = cv.contourArea(cnt)
@@ -77,9 +90,10 @@ for i in range(len(contours)):
     rect_area = w * h
     compare_area.append(rect_area)
 
+
     # 컨투어 영역이 1인것 없애보기 -임시
-    if rect_area == 1:
-        closing[x, y, 0]
+    # if rect_area == 1:
+        # closing[x, y, 0]
 
     # by 김주희_가로 세로의 비율 _200702
     aspect_ratio = float(w)/h
@@ -91,9 +105,48 @@ for i in range(len(contours)):
 
     # cv.rectangle(closing, (x, y), (x + w, y + h), (0, 127, 127), 10)
     if (aspect_ratio > 0.4) and (aspect_ratio < 1.2):
+        # 크기가 10픽셀 이하인 것은 모두 없애기._201012
+        if (w > 10) :
+            cv.rectangle(closing, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            cx = int(x + w/2)
+            cy = int(y + h/2)
+            mnt = cv.moments(cnt)
 
-        # box.append(cv.boundingRect(cnt))
-        cv.rectangle(closing, (x, y), (x+w, y+h), (0, 255, 0), 2)
+            # by 김주희_컨투어한 영역의 중심점이 아닌 사각형의 중심점을 표시함._201012
+            cv.circle(closing, (cx, cy), 3, (255, 0, 0), -1)
+            center.append([cx, cy])
+
+
+
+print('center', center)
+print('center size', len(center))
+
+
+# by 김주희_점자 중 가장 처음의 2점 혹은 가장 마지막의 2점에 대한 기울기 _201012
+dx = center[-2][0] - center[-1][0]
+dy = center[-2][1] - center[-1][1]
+
+dx2 = center[0][0] - center[2][0]
+dy2 = center[0][1] - center[2][1]
+
+print('dx', dx)
+print('dy', dy)
+print('dx2', dx2)
+print('dy2', dy2)
+math.atan(dy/dx)
+print('atan', math.atan(dy/dx) )
+
+# by 김주희_ 각도 구하기 _201012
+angle = math.atan(dy/dx) * (180.0 / math.pi)
+
+h, w = closing.shape[:2]
+M1 = cv.getRotationMatrix2D((w/2, h/2), 10, 1)
+M2 = cv.getRotationMatrix2D((w/2, h/2), angle, 1)
+M3 = cv.getRotationMatrix2D((w/2, h/2), math.atan(dy2/dx2), 1)
+rotation1 = cv.warpAffine(closing, M2,(w, h))
+# rotation1 = cv.wrapAffine(closing, M2, (w,h))
+rotation2 = cv.warpAffine(closing, M1,(w, h))
+rotation3 = cv.warpAffine(closing, M3,(w, h))
 
 # 현재 closing에 contour 실시함 -> 사각형 그려져 있음.
 # 거리를 계산하여 주변에 점이 많으면 같이 없앰.
@@ -104,21 +157,31 @@ print(cnt)
 
 print(closing.shape)
 
+# 회전한 이미지에 직선을 그린다.
+
+
+
+
 plt.subplot(221)
-plt.imshow(yuv, cmap='gray')
-plt.title('yuv')
+# plt.subplot(121)
+plt.imshow(rotation1, cmap='gray')
+plt.title('roatate m2')
 plt.axis('off')
+# by 김주희_ 중심점에 맞는 수평선 그리기 _201012
+plt.hlines(center[0][1], 0, 2592, colors='pink', linewidth=1)
 # #
 plt.subplot(222)
+# plt.subplot(122)
 # plt.imshow(equ, cmap='gray')
 # plt.title('histogram equalization')
 plt.imshow(closing)
 plt.title('closing')
 plt.axis('off')
-# #
+plt.hlines(center[0][1], 0, 2592, colors='pink', linewidth=1)
+# # #
 plt.subplot(223)
-plt.imshow(y2, cmap='gray')
-plt.title('YUV-Y')
+plt.imshow(rotation2, cmap='gray')
+plt.title('roatate 90')
 plt.axis('off')
 
 #
@@ -127,11 +190,18 @@ plt.axis('off')
 # plt.axis('off')
 
 #
-#
+# #
 plt.subplot(224)
-# # plt.hist()
-plt.imshow(img, cmap='gray')
-plt.title('original image')
+
+plt.imshow(rotation3, cmap='gray')
+plt.title('roatate M3')
 plt.axis('off')
+
+
+plt.hlines(center[0][1], 0, 2592, colors='pink', linewidth=1)
+# # # plt.hist()
+# plt.imshow(img, cmap='gray')
+# plt.title('original image')
+# plt.axis('off')
 
 plt.show()
