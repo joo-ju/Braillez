@@ -47,19 +47,10 @@ y2[:, :, 0] = yuv[:, :, 0]
 y2[:, :, 1] = yuv[:, :, 0]
 y2[:, :, 2] = yuv[:, :, 0]
 sobel = cv.Sobel(y2, cv.CV_8U, 1, 0, 3)
-#201007_이진 영상에서 점자 검출
 
+#201007_이진 영상에서 점자 검출
 ret,thr = cv.threshold(y2,210,255,cv.THRESH_BINARY)
 print(thr.shape)
-#
-# y2[:, :, 0] = thr
-# y2[:, :, 1] = thr
-# y2[:, :, 2] = thr
-#
-# thresh1[:, :, 0] = thr2
-# thresh1[:, :, 1] = thr2
-# thresh1[:, :, 2] = thr2
-
 
 kernel = np.ones((3, 3), np.uint8)
 closing = cv.morphologyEx(thr, cv.MORPH_CLOSE, kernel)
@@ -74,8 +65,6 @@ closing[-cut_num[0]:, :] = 125
 closing[:, :cut_num[1]] = 125
 closing[:, -cut_num[1]:] = 125
 
-
-# closing = cv.morphologyEx(y2, cv.MORPH_CLOSE, kernel)
 contours, _ = cv.findContours(closing[:, :, 0], cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
 center=[]
 for i in range(len(contours)):
@@ -88,20 +77,12 @@ for i in range(len(contours)):
     rect_area = w * h
     compare_area.append(rect_area)
 
-
-    # 컨투어 영역이 1인것 없애보기 -임시
-    # if rect_area == 1:
-        # closing[x, y, 0]
-
     # by 김주희_가로 세로의 비율 _200702
     aspect_ratio = float(w)/h
 
 
     # by 김주희_컨투어한 영역의 비율을 보고 사각형을 그림 _200702
     #   점자에 대한 contour를 찾는 과정_가로 세로 비율이 1:1에서 크게 벗어난 것을 제외하고 표시
-    # if(aspect_ratio>0.8)and(aspect_ratio<1.5)and(f <= float(f)*0.7):
-
-    # cv.rectangle(closing, (x, y), (x + w, y + h), (0, 127, 127), 10)
     if (aspect_ratio > 0.4) and (aspect_ratio < 1.2):
         # 크기가 10픽셀 이하인 것은 모두 없애기._201012
         if (w > 10) :
@@ -115,11 +96,6 @@ for i in range(len(contours)):
             center.append([cx, cy])
 
 
-
-print('center', center)
-print('center size', len(center))
-
-
 # by 김주희_점자 중 가장 처음의 2점 혹은 가장 마지막의 2점에 대한 기울기 _201012
 dx = center[-2][0] - center[-1][0]
 dy = center[-2][1] - center[-1][1]
@@ -127,35 +103,21 @@ dy = center[-2][1] - center[-1][1]
 dx2 = center[0][0] - center[2][0]
 dy2 = center[0][1] - center[2][1]
 
-print('dx', dx)
-print('dy', dy)
-print('dx2', dx2)
-print('dy2', dy2)
-
 # by 김주희_두 기울기의 평균으로 회전하기_201019
 ave = (math.atan(dy/dx) + math.atan(dy2/dx2)) / 2
-# math.atan(dy2/dx2)
-print('atan', ave)
 
 # by 김주희_ 각도 구하기 _201012
 angle = ave * (180.0 / math.pi)
 
 h, w = closing.shape[:2]
-# M1 = cv.getRotationMatrix2D((w/2, h/2), 10, 1)
 M = cv.getRotationMatrix2D((w/2, h/2), angle, 1)
 rotation = cv.warpAffine(closing, M,(w, h))
 
-# by 김주희_ 현재 closing에 contour 실시함 -> 사각형 그려져 있음._201012
-# by 김주희_ 거리를 계산하여 주변에 점이 많으면 같이 없앰.
-# 넓이들중에 최빈 값을 구한다.
-cnt = Counter(compare_area)
-# print(cnt.most_common(3))
-# print(cnt)
-#
-# print(closing.shape)
+
 ro_center = []
 center_x = []
 center_y = []
+#by 김주희_회전된 이미지로 다시 중심 , 컨투어영역 찾기 _201019
 contours, _ = cv.findContours(rotation[:, :, 0], cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
 for i in range(len(contours)):
     cnt = contours[i]
@@ -167,20 +129,12 @@ for i in range(len(contours)):
     rect_area = w * h
     compare_area.append(rect_area)
 
-
-    # 컨투어 영역이 1인것 없애보기 -임시
-    # if rect_area == 1:
-        # closing[x, y, 0]
-
     # by 김주희_가로 세로의 비율 _200702
     aspect_ratio = float(w)/h
 
 
     # by 김주희_컨투어한 영역의 비율을 보고 사각형을 그림 _200702
     #   점자에 대한 contour를 찾는 과정_가로 세로 비율이 1:1에서 크게 벗어난 것을 제외하고 표시
-    # if(aspect_ratio>0.8)and(aspect_ratio<1.5)and(f <= float(f)*0.7):
-
-    # cv.rectangle(closing, (x, y), (x + w, y + h), (0, 127, 127), 10)
     if (aspect_ratio > 0.4) and (aspect_ratio < 1.2):
         # 크기가 10픽셀 이하인 것은 모두 없애기._201012
         if (w > 10) :
@@ -198,13 +152,10 @@ for i in range(len(contours)):
 
 
 
-#by 김주희_ _201019
-print("변경된 ro_center : ", ro_center)
 
-print("변경된 center_y : ", center_y)
-print("변경된 center_x : ", center_x)
+#by 김주희_중심의 x값을 오름차순으로 정렬  _201019
 center_x.sort()
-print("정렬된 center_x : ", center_x)
+
 diff = 0
 count = 0
 sum = 0
@@ -253,31 +204,11 @@ for i in range(len(center_y)-1):
 print("hline", hline)
 print("vline", vline)
 
-
-
-
-#by 김주희_점에서 가장 가까운 수 찾기 _201019
-center_arr = np.asarray(a=ro_center)
-arr_center_y = np.asarray(a=center_y)
-value = center_y[0]
-print("arr_center_y.shape ", arr_center_y.shape)
-# result = np.find_nearest(arr_center_y, value)
-# print("find_nearest ( center_y[0] :", center_y[0], ") : ",result )
-# print("center_arr : ", center_arr)
-
-#by 김주희_ _201019
-# #by 김주희_ _201019
-
-
-
 # plt.subplot(221)
 plt.subplot(121)
 plt.imshow(rotation, cmap='gray')
 plt.title('roatate')
 plt.axis('off')
-
-# by 김주희_ 중심점에 맞는 수평선 그리기 _201012
-# plt.hlines(center[0][1], 0, 2592, colors='pink', linewidth=1)
 
 # by 김주희_ 근접한 y값들의 평균을 구해서 수직선 그리기._201019
 for i in range(len(hline)):
@@ -285,11 +216,9 @@ for i in range(len(hline)):
 
 for i in range(len(vline)):
     plt.vlines(vline[i], 0, 1944, colors='pink', linewidth=1)
-# #
-# plt.subplot(222)
+
+
 plt.subplot(122)
-# plt.imshow(equ, cmap='gray')
-# plt.title('histogram equalization')
 plt.imshow(closing)
 plt.title('closing')
 plt.axis('off')
