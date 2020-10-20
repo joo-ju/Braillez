@@ -14,15 +14,18 @@ from collections import Counter
 # img = cv.imread('./data/smoking_2.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/smoking_3.png', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/g.jpg', cv.IMREAD_GRAYSCALE)
-img = cv.imread('./data/f.jpg', cv.IMREAD_GRAYSCALE)
+# img = cv.imread('./data/f.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/e.jpg', cv.IMREAD_GRAYSCALE)
+img = cv.imread('./data/f.jpg', cv.IMREAD_GRAYSCALE)
+
 
 # img_2 = cv.imread('./data/smoking.png')
 # img_2 = cv.imread('./data/smoking_2.jpg')
 # img_2 = cv.imread('./data/smoking_3.png')
 # img_2 = cv.imread('./data/g.jpg')
-img_2 = cv.imread('./data/f.jpg')
+# img_2 = cv.imread('./data/f.jpg')
 # img_2 = cv.imread('./data/e.jpg')
+img_2 = cv.imread('./data/f.jpg')
 
 # 컨투어 영역의 넓이 중 최빈값으 구하기 위한 배
 compare_area = []

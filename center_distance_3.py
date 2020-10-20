@@ -8,12 +8,14 @@ import statistics as st
 # img = cv.imread('./data/example.png', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/example_1.jpeg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/smoking.png', cv.IMREAD_GRAYSCALE)
-img = cv.imread('./data/smoking_2.jpg', cv.IMREAD_GRAYSCALE)
+# img = cv.imread('./data/smoking_2.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/smoking_3.png', cv.IMREAD_GRAYSCALE)
+img = cv.imread('./data/h.jpg', cv.IMREAD_GRAYSCALE)
 
 # img_2 = cv.imread('./data/smoking.png')
-img_2 = cv.imread('./data/smoking_2.jpg')
+# img_2 = cv.imread('./data/smoking_2.jpg')
 # img_2 = cv.imread('./data/smoking_3.png')
+img_2 = cv.imread('./data/h.jpg')
 
 img = img / 255
 img_2 = img_2 / 255
@@ -27,13 +29,13 @@ thresh1 = img_180
 # 이미지의 명암이 일정하지 않기 때문에 가변적으로 threshold를 한다.
 # thr1 = cv.adaptiveThreshold(img, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 11, 2)
 thr2 = cv.adaptiveThreshold(img, 255, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY, 11, 2)
-thr2 = cv.adaptiveThreshold(img_180, 255, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY, 11, 2)
-
-thr3 = cv.adaptiveThreshold(img, 255, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY, 11, 2)
+# thr2 = cv.adaptiveThreshold(img_180, 255, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY, 11, 2)
+#
+# thr3 = cv.adaptiveThreshold(img, 255, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY, 11, 2)
 
 
 # equ = cv.equalizeHist(thr2)
-equ = cv.equalizeHist(img)
+# equ = cv.equalizeHist(img)
 
 ret,thr = cv.threshold(equ,210,255,cv.THRESH_BINARY)
 

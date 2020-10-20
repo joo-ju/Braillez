@@ -15,11 +15,13 @@ import statistics as st
 # img = cv.imread('./data/smoking_2.jpg', cv.IMREAD_GRAYSCALE)
 img = cv.imread('./data/smoking_3.png', cv.IMREAD_GRAYSCALE)
 img = cv.imread('./data/g.jpg', cv.IMREAD_GRAYSCALE)
+img = cv.imread('./data/h.jpg', cv.IMREAD_GRAYSCALE)
 
 # img_2 = cv.imread('./data/smoking.png')
 # img_2 = cv.imread('./data/smoking_2.jpg')
 # img_2 = cv.imread('./data/smoking_3.png')
 img_2 = cv.imread('./data/g.jpg')
+img_2 = cv.imread('./data/h.jpg')
 
 # 라즈베리파이로 사진 찍었을 때 180도 회전해서 보이기 때문에 회전시킴.
 # img = cv.rotate(img, cv.ROTATE_180)
