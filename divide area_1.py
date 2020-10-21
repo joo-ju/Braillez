@@ -297,12 +297,12 @@ plt.title('roatate')
 plt.axis('off')
 
 # by 김주희_ 중간값 선 그리기  _201020
-# for i in range(1, len(mid_x)):
-#     plt.vlines(mid_x[i], 0, 1944, colors='pink', linewidth=1)
-#     # plt.vlines(mid_x[i]-10, 0, 1944, colors='blue', linewidth=1)
-#     # plt.vlines(mid_x[i]+10, 0, 1944, colors='blue', linewidth=1)
-# for i in range(1, len(mid_y)):
-#     plt.hlines(mid_y[i], 0, 2592, colors='pink', linewidth=1)
+for i in range(1, len(mid_x)):
+    plt.vlines(mid_x[i], 0, 1944, colors='pink', linewidth=1)
+    # plt.vlines(mid_x[i]-10, 0, 1944, colors='blue', linewidth=1)
+    # plt.vlines(mid_x[i]+10, 0, 1944, colors='blue', linewidth=1)
+for i in range(1, len(mid_y)):
+    plt.hlines(mid_y[i], 0, 2592, colors='pink', linewidth=1)
 
 mid_x.append(0)
 print("mid_x : ", mid_x)
@@ -311,26 +311,26 @@ print("mid_x : ", mid_x)
     # 글자 사이의 간격은 80px 이상
     # 간격의 차이를 계산하여 위치 및 빈 공간 추적
 mid_x.append(0)
-for i in range(1, len(mid_x) - 1):
-    # 수직선_글자간의 간격 일 때 -> 다른 글자 일 떄
-    if (75 <= abs(mid_x[i + 1] - mid_x[i])):
-        plt.vlines(mid_x[i]-20, 0, 1944, colors='lightblue', linewidth=1)
-        plt.vlines(mid_x[i]+20, 0, 1944, colors='lightblue', linewidth=1)
-        # 글자 사이의 간격(80px)보다 더 멀리 있을 때
-        if(120 <= abs(mid_x[i + 1] - mid_x[i])):
-            plt.vlines(mid_x[i+1] - 20 - 40, 0, 1944, colors='lightblue', linewidth=1)
-    else:
-        plt.vlines(mid_x[i]-20, 0, 1944, colors='lightblue', linewidth=1)
-
-
-print("mid_y : ", mid_y)
-
-# by 김주희_수평선 그리기_201021
-for i in range(1, len(mid_y)):
-    plt.hlines(mid_y[i]-20, 0, 2592, colors='lightblue', linewidth=1)
-    # plt.hlines(mid_y[i]+20, 0, 2592, colors='lightblue', linewidth=1)
-    if i==len(mid_y)-1:
-        plt.hlines(mid_y[i]+20, 0, 2592, colors='lightblue', linewidth=1)
+# for i in range(1, len(mid_x) - 1):
+#     # 수직선_글자간의 간격 일 때 -> 다른 글자 일 떄
+#     if (75 <= abs(mid_x[i + 1] - mid_x[i])):
+#         plt.vlines(mid_x[i]-20, 0, 1944, colors='lightblue', linewidth=1)
+#         plt.vlines(mid_x[i]+20, 0, 1944, colors='lightblue', linewidth=1)
+#         # 글자 사이의 간격(80px)보다 더 멀리 있을 때
+#         if(120 <= abs(mid_x[i + 1] - mid_x[i])):
+#             plt.vlines(mid_x[i+1] - 20 - 40, 0, 1944, colors='lightblue', linewidth=1)
+#     else:
+#         plt.vlines(mid_x[i]-20, 0, 1944, colors='lightblue', linewidth=1)
+#
+#
+# print("mid_y : ", mid_y)
+#
+# # by 김주희_수평선 그리기_201021
+# for i in range(1, len(mid_y)):
+#     plt.hlines(mid_y[i]-20, 0, 2592, colors='lightblue', linewidth=1)
+#     # plt.hlines(mid_y[i]+20, 0, 2592, colors='lightblue', linewidth=1)
+#     if i==len(mid_y)-1:
+#         plt.hlines(mid_y[i]+20, 0, 2592, colors='lightblue', linewidth=1)
 
 
 
