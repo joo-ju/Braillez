@@ -369,29 +369,29 @@ mid_x.append(0)
 mid_x.append(0)
 # by 배아랑이_점자 영역 구분
 for i in range(len(mid_x)-2):
-    if 75 <= abs(mid_x[i + 1] - mid_x[i]):
-        if 120 <= abs(mid_x[i + 1] - mid_x[i]):
-            if 150 <= abs(mid_x[i + 1] - mid_x[i]):
-                count += 1
+    if 75 <= (mid_x[i + 1] - mid_x[i]):
+        if 120 <= (mid_x[i + 1] - mid_x[i]):
+            if 150 <= (mid_x[i + 1] - mid_x[i]):
                 # 1___1 -> 점자 2개
-                braille.append([mid_x[i], mid_x[i]+40])
+                if i != len(mid_x)-3:
+                    braille.append([mid_x[i], mid_x[i]+40])
             else:
                 # 1__1 -> 점자 2개  -> 2가지 1 _ _1 / 1_ _ 1
-                if 75 <= abs(mid_x[i+2] - mid_x[i+1]):
-                    if 120 <= abs(mid_x[i+2] - mid_x[i+1]):
-                        if 150 <= abs(mid_x[i+2] - mid_x[i+1]):     # 1__1___1
+                if 75 <= (mid_x[i+2] - mid_x[i+1]):
+                    if 120 <= (mid_x[i+2] - mid_x[i+1]):
+                        if 150 <= (mid_x[i+2] - mid_x[i+1]):     # 1__1___1
                             braille.append([mid_x[i], mid_x[i]+40])
                         else:                                       # 1__1__1
                             if i != 0:
-                                if 75 <= abs(mid_x[i] - mid_x[i-1]):
-                                    if 120 <= abs(mid_x[i+2] - mid_x[i+1]):
+                                if 75 <= (mid_x[i] - mid_x[i-1]):
+                                    if 120 <= (mid_x[i+2] - mid_x[i+1]):
                                         braille.append([])
                                     else:
                                         braille.append([mid_x[i], mid_x[i]+40])
                                 else:
                                     braille.append([mid_x[i-1], mid_x[i]])
                     else:                                           # 1__1_1
-                        if 75 <= abs(mid_x[i] - mid_x[i-1]):        # _1__1_1
+                        if 75 <= (mid_x[i] - mid_x[i-1]):        # _1__1_1
                             braille.append([mid_x[i]-40, mid_x[i]])
                         else:                                       # 11__1_1
                             braille.append([mid_x[i-1], mid_x[i]])
@@ -399,8 +399,8 @@ for i in range(len(mid_x)-2):
                     braille.append([mid_x[i], mid_x[i]+40])
         else:
             # 1_1 -> 점자 2개
-            if i != 0:
-                if 75 <= abs(mid_x[i] - mid_x[i-1]):             # _1_1
+            if i != len(mid_x)-3:
+                if 75 <= (mid_x[i] - mid_x[i-1]):             # _1_1
                     braille.append([mid_x[i]-40, mid_x[i]])
                 else:                                           # 11_1
                     braille.append([mid_x[i-1], mid_x[i]])
@@ -408,11 +408,11 @@ for i in range(len(mid_x)-2):
                 braille.append([mid_x[i]-40, mid_x[i]])
     else:
         # 11 -> 점자 하나
-        if i == len(mid_x)-2:
-            braille.append([mid_x[i], mid_x[i+1]])
+        if i == len(mid_x)-3:
+            braille.append([mid_x[i-1], mid_x[i]])
+    braille.append([i])
 
 print(braille)
-
 
 
 # for i in range(len(vline)):
