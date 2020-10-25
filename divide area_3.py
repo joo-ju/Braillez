@@ -32,7 +32,8 @@ from unicode import join_jamos
 # img = cv.imread('./data/i.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/k.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/m.jpg', cv.IMREAD_GRAYSCALE)
-img = cv.imread('./data/n.jpg', cv.IMREAD_GRAYSCALE)
+img = cv.imread('./data/n.jpg')
+img = cv.imread('./data/o.jpg')
 
 # img_2 = cv.imread('./data/smoking.png')
 # img_2 = cv.imread('./data/smoking_2.jpg')
@@ -42,7 +43,8 @@ img = cv.imread('./data/n.jpg', cv.IMREAD_GRAYSCALE)
 # img_2 = cv.imread('./data/e.jpg')
 # img_2 = cv.imread('./data/k.jpg')
 # img_2 = cv.imread('./data/m.jpg')
-img_2 = cv.imread('./data/n.jpg')
+img_2 = cv.imread('./data/o.jpg')
+# img_2 = cv.imread('./data/n.jpg')
 # img_2 = cv.imread('./data/j.jpg')
 
 
@@ -441,9 +443,9 @@ print(join_jamos(""))
 if kor_d[0] == '000101':
     str = "장애인전용"
 if kor_d[0] == '100011':
-    str = "여자화장"
+    str = "여자화장실"
 
-실
+
 # for i in range(len(vline)):
 #     for j in range(len(hline)):
 #

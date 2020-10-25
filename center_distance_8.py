@@ -3,7 +3,7 @@ import cv2 as cv
 import matplotlib.pyplot as plt
 import math
 from collections import Counter
-<<<<<<< HEAD
+# <<<<<<< HEAD
 from braille import table_kor
 # table_kor = {'ㄱ': '000100', 'ㄴ':'100100', 'ㄷ':'010100', 'ㄹ':'000010', 'ㅁ':'1000010', 'ㅂ':'000110',
 #              'ㅅ':'000001', 'ㅈ':'000101', 'ㅊ':'000011', 'ㅋ':'110100', 'ㅌ':'110010', 'ㅍ':'100110',
@@ -16,8 +16,8 @@ from braille import table_kor
 #              '가':'110101', '사':'111000', '억':'100111', '언':'011111', '얼':'011110', '연':'100001',
 #              '열':'110011', '영':'110111', '옥':'101101', '온':'111011', '옹':'111111', '운':'110110',
 #              '울':'111101', '은':'101011', '을':'011101', '인':'111110'}
-=======
->>>>>>> remotes/github/rang
+# =======
+# >>>>>>> remotes/github/rang
 
 # 카메라로 사진을 다시 찍어서 실행해봄. 명암이 균일하지 않아서 검출에 힘들었던 사진말고 조금더 명암이 균일한 조건에서 촬영함
 # 조건 : 표지판과 카메라 10cm 거리, 카메라와 표지판이 평행하게 촬영
@@ -328,7 +328,7 @@ print("mid_x : ", mid_x)
 # 간격의 차이를 계산하여 위치 및 빈 공간 추적
 # by 배아랑이_마지막 점자 값 조정_201022
 #mid_x.append(0)
-<<<<<<< HEAD
+# <<<<<<< HEAD
 # for i in range(len(mid_x)):
 #     # 수직선_글자간의 간격 일 때 -> 다른 글자 일 떄
 #     if i == len(mid_x)-1:                               # last
@@ -359,7 +359,7 @@ print("mid_x : ", mid_x)
 #         else:
 #             plt.vlines(mid_x[i]-20, 0, 1944, colors='lightblue', linewidth=1)
 #             vline.append(mid_x[i]-20)
-=======
+# =======
 for i in range(len(mid_x)):
     # 수직선_글자간의 간격 일 때 -> 다른 글자 일 떄
     if i == len(mid_x)-1:                               # last
@@ -390,7 +390,7 @@ for i in range(len(mid_x)):
         else:
             plt.vlines(mid_x[i]-20, 0, 1944, colors='lightblue', linewidth=1)
             vline.append(mid_x[i]-20)
->>>>>>> remotes/github/rang
+# >>>>>>> remotes/github/rang
 
 
 print("mid_y : ", mid_y)
@@ -406,24 +406,24 @@ for i in range(len(mid_y)):
 
 # by 배아랑이_점자 영역 구분하는 수직선, 수평선_201023
 hline.sort()
-<<<<<<< HEAD
+# <<<<<<< HEAD
 print("hline : ", hline)
-=======
+# =======
 vline.sort()
 print("hline : ", hline)
 print("vline : ", vline)
->>>>>>> remotes/github/rang
+# >>>>>>> remotes/github/rang
 
 
 braille = []
 count = 0
 mid_x.append(0)
 mid_x.append(0)
-<<<<<<< HEAD
+# <<<<<<< HEAD
 # by 배아랑이_점자 영역 구분_201023
-=======
+# =======
 # by 배아랑이_점자 영역 구분
->>>>>>> remotes/github/rang
+# >>>>>>> remotes/github/rang
 for i in range(len(mid_x)-2):
     if 75 <= (mid_x[i + 1] - mid_x[i]):
         if 120 <= (mid_x[i + 1] - mid_x[i]):
@@ -466,7 +466,7 @@ for i in range(len(mid_x)-2):
         # 11 -> 점자 하나
         if i == len(mid_x)-3:
             braille.append([mid_x[i-1], mid_x[i]])
-<<<<<<< HEAD
+# <<<<<<< HEAD
 
 
 print("braille", braille)
@@ -621,11 +621,11 @@ for i in range(len(kor_d)):
 #
 
 
-=======
+# =======
     braille.append([i])
 
 print(braille)
->>>>>>> remotes/github/rang
+# >>>>>>> remotes/github/rang
 
 
 # for i in range(len(vline)):

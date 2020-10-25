@@ -4,7 +4,10 @@ import matplotlib.pyplot as plt
 import math
 from collections import Counter
 from braille import table_kor
+
+
 img = cv.imread('./data/n.jpg', cv.IMREAD_GRAYSCALE)
+# img = cv.imread('./data/n.jpg')
 img = cv.rotate(img, cv.ROTATE_180)
 img_2 = cv.imread('./data/n.jpg')
 img_2 = cv.rotate(img_2, cv.ROTATE_180)
@@ -43,8 +46,11 @@ closing[-cut_num[0]:, :] = 125
 closing[:, :cut_num[1]] = 125
 closing[:, -cut_num[1]:] = 125
 
+# 추가
+closing1 = np.array(closing[:, :, 0], dtype=np.uint8)
+# closing1 = 255-closing1
+contours, _ = cv.findContours(closing1, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
 
-contours, _ = cv.findContours(closing[:, :, 0], cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
 center=[]
 for i in range(len(contours)):
     cnt = contours[i]
@@ -86,7 +92,7 @@ cnt = Counter(compare_area)
 ro_center = []
 center_x = []
 center_y = []
-contours, _ = cv.findContours(rotation[:, :, 0], cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
+contours, A = cv.findContours(rotation[:, :, 0], cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
 for i in range(len(contours)):
     cnt = contours[i]
     area = cv.contourArea(cnt)
