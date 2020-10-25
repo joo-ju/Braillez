@@ -246,7 +246,9 @@ for point in ro_center:
 
 
 binary_code.append(b)
-kor_d = []
+kor_d = []#
+
+
 kor_b = np.zeros((len(binary_code), 6),np.int32)
 for i in range(len(binary_code)):
     for j in range(len(binary_code[i])):
