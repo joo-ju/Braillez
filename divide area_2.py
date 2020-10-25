@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 import math
 from collections import Counter
 
-# 안됨
-
 # 카메라로 사진을 다시 찍어서 실행해봄. 명암이 균일하지 않아서 검출에 힘들었던 사진말고 조금더 명암이 균일한 조건에서 촬영함
 # 조건 : 표지판과 카메라 10cm 거리, 카메라와 표지판이 평행하게 촬영
 
@@ -20,7 +18,7 @@ from collections import Counter
 # img = cv.imread('./data/e.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/i.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/k.jpg', cv.IMREAD_GRAYSCALE)
-img = cv.imread('./data/m.jpg', cv.IMREAD_GRAYSCALE)
+# img = cv.imread('./data/m.jpg', cv.IMREAD_GRAYSCALE)
 img = cv.imread('./data/n.jpg', cv.IMREAD_GRAYSCALE)
 
 # img_2 = cv.imread('./data/smoking.png')
@@ -30,7 +28,7 @@ img = cv.imread('./data/n.jpg', cv.IMREAD_GRAYSCALE)
 # img_2 = cv.imread('./data/f.jpg')
 # img_2 = cv.imread('./data/e.jpg')
 # img_2 = cv.imread('./data/k.jpg')
-img_2 = cv.imread('./data/m.jpg')
+# img_2 = cv.imread('./data/m.jpg')
 img_2 = cv.imread('./data/n.jpg')
 # img_2 = cv.imread('./data/j.jpg')
 
@@ -247,6 +245,8 @@ center_x.append(0)
 # center_x.insert(0, 0)
 
 print("추가한 center_x : ", center_x)
+print("추가한 center_y : ", center_y)
+
 # by 김주희_y값 기준 만약에 center의 거리가 20px이하이면 카운트 해주고, 값을 더해준다. (나중에 평균 구할 예정) _201019
 for i in range(len(center_y)-1):
     # by 김주희_x값중 쵀대값과 최소값의 중간값 구하기-더해서 나누기2 _201020
@@ -256,10 +256,10 @@ for i in range(len(center_y)-1):
         temp.append(center_x[i])
     else:
         temp.append(center_x[i])
-        mid_x.append(int((min(temp) + max(temp)) / 2))
         sameLevel_x.append(temp)
+        mid_x.append(int((min(temp) + max(temp)) / 2))
         temp = []
-    print("sameLevel_x : ", sameLevel_x)
+    print("sameLevel_x : ", i, sameLevel_x)
 
 
     if abs(center_y[i+1] - center_y[i]) <= 20:
@@ -269,79 +269,11 @@ for i in range(len(center_y)-1):
         sameLevel_y.append(temp2)
         mid_y.append(int((min(temp2) + max(temp2)) / 2))
         temp2 = []
-    print("sameLevel_y : ", sameLevel_y)
+    print("sameLevel_y : ", i, sameLevel_y)
 
 
 print("mid_x : ", mid_x)
 print("mid_y : ", mid_y)
-
-
-# by 김주희_ 중심선을 기준으로 완벽한 점자 중심 라인 그리기 -> 점이 없는 부분도 인식하게._201021
-c = 0
-# # cc = 0
-# for i in range(1, len(center_y)-1):
-#     # by 김주희_x값중 쵀대값과 최소값의 중간값 구하기-더해서 나누기2 _201020
-#     # 중심값의 x값의 차이가 20 이하이면 같은 배열에 대입한다.
-#
-#     if abs(center_x[i+1] - center_x[i]) <= 20:
-#         temp.append(center_x[i])
-#     else:
-#         temp.append(center_x[i])
-#         sameLevel_x.append(temp)
-#         mid_x.append(int((min(temp) + max(temp)) / 2))
-#         temp = []
-#     print("sameLevel_x : ", i, sameLevel_x)
-#
-#
-#     if abs(center_y[i+1] - center_y[i]) <= 20:
-#         temp2.append(center_y[i])
-#     else:
-#         temp2.append(center_y[i])
-#         sameLevel_y.append(temp2)
-#         mid_y.append(int((min(temp2) + max(temp2)) / 2))
-#         temp2 = []
-#     print("sameLevel_y : ", i, sameLevel_y)
-
-# for i in range(1, len(mid_x)-1):
-#     # 첫번째 중심선과 두번째 중심선의 거리가 40범위가 넘어가면 -> 다른 글자라는 의미이므로 앞쪽에 선을 추가한다.
-#     if i == 1 and mid_x[i+1]-mid_x[i] > 50:
-#         d = mid_x[i] - 40
-#         mid_x.insert(i, d)
-#         i = i + 1
-#     # 첫번째 중심선과 두번째 중심선의 거리가 80범위가 넘어가면 -> 첫번째 중심선이 있고 두번 째 중심선이 없다는 뜻.-> 뒷쪽에 선을 추가한다.
-#     if i == 1 and mid_x[i+1]-mid_x[i] > 90:
-#         d = mid_x[i] + 40
-#         mid_x.insert(i, d)
-#         print("d1", d)
-#         print("insert_mid_x : ", mid_x)
-#         i=i+1
-#     # 글자의 첫번 째 선인데 40범위 안에 있으면 완벽함. -> c 값만 1로 설정해주고 넘어감
-#     if c == 0 and mid_x[i+1]-mid_x[i] < 55:
-#         c = 1
-#
-#     if c == 1:
-#         # 두번째 선에서 다음 선이 80범위를 넘어간다면 앞쪽에 선을 추가한다.
-#         if mid_x[i+1]-mid_x[i] > 90:
-#             d = mid_x[i+1] - 40
-#             mid_x.insert(i,d )
-#             print("d2", d)
-#             print("insert_mid_x : ", mid_x)
-#             i=i+1
-#             c == 0
-#     # 만약에 거리가 80범위라면 -> 다른 글자일 떄
-#     # elif mid_x[i+1]-mid_x[i] < 90:
-
-print("area_mid_x : ", mid_x)
-
-
-# # by 김주희_ 중심선의 가장 끝에서부터 2개가 40px정도 차이나면 중심선이 두개가 있다는 뜻 -> 그거를 구분한다. 없다면 그려주고, 있다면 넘어가고_201021
-# # 중심선이 두개라면
-# if 35< mid_x[-1]-mid_x[-2] < 50:
-# else:
-#     # 글자간의 간격넓이라면 -> 두 선중 두번째 선이 없는 경우
-#     if 75< mid_x[-1]-mid_x[-2] <90:
-
-
 #
 # mid_x.append(0)
 # print("mid_x : ", mid_x)
@@ -365,48 +297,52 @@ print("area_mid_x : ", mid_x)
 plt.imshow(rotation, cmap='gray')
 plt.title('roatate')
 plt.axis('off')
-
 # by 김주희_ 중간값 선 그리기  _201020
+# for i in range(1, len(mid_x)):
+#     plt.vlines(mid_x[i], 0, 1944, colors='pink', linewidth=1)
+#     # plt.vlines(mid_x[i]-10, 0, 1944, colors='blue', linewidth=1)
+#     # plt.vlines(mid_x[i]+10, 0, 1944, colors='blue', linewidth=1)
+# for i in range(1, len(mid_y)):
+#     plt.hlines(mid_y[i], 0, 2592, colors='pink', linewidth=1)
+
+
+print("mid_x : ", mid_x)
+# by 김주희_점자 영역을 6등분 하기_201020
+# 한 글자 안에서의 점자 간의 간격은 40px-50px
+# 글자 사이의 간격은 80px 이상
+# 간격의 차이를 계산하여 위치 및 빈 공간 추적
+# by 배아랑이_마지막 점자 값 조정_201022
+#mid_x.append(0)
 for i in range(len(mid_x)):
-    plt.vlines(mid_x[i], 0, 1944, colors='pink', linewidth=1)
-    # plt.vlines(mid_x[i]-10, 0, 1944, colors='blue', linewidth=1)
-    # plt.vlines(mid_x[i]+10, 0, 1944, colors='blue', linewidth=1)
-for i in range(1, len(mid_y)):
-    plt.hlines(mid_y[i], 0, 2592, colors='pink', linewidth=1)
-
-# mid_x.append(0)
-print(" 중심선 그리고 나서 mid_x : ", mid_x)
-    # by 김주희_ 점자 영역을 6등분 하기_201020
-    # 한 글자 안에서의 점자 간의 간격은 40px-50px
-    # 글자 사이의 간격은 80px 이상
-    # 간격의 차이를 계산하여 위치 및 빈 공간 추적
-mid_x.append(0)
-for i in range(len(mid_x) - 1):
-    # # 수직선_글자간의 간격 일 때 -> 다른 글자 일 떄
-    # if (75 <= abs(mid_x[i + 1] - mid_x[i])):
-    #     plt.vlines(mid_x[i]-20, 0, 1944, colors='lightblue', linewidth=1)
-    #     plt.vlines(mid_x[i]+20, 0, 1944, colors='lightblue', linewidth=1)
-    #     # 글자 사이의 간격(80px)보다 더 멀리 있을 때
-    #     if(120 <= abs(mid_x[i + 1] - mid_x[i])):
-    #         plt.vlines(mid_x[i+1] - 20 - 40, 0, 1944, colors='lightblue', linewidth=1)
-    # else:
-    #     plt.vlines(mid_x[i]-20, 0, 1944, colors='lightblue', linewidth=1)
-    if i % 2 == 1:
-        plt.vlines(mid_x[i]-20, 0, 1944, colors='lightblue', linewidth=1)
+    # 수직선_글자간의 간격 일 때 -> 다른 글자 일 떄
+    if i == len(mid_x)-1:
+        if (75 <= abs(mid_x[i] - mid_x[i-1])):
+            plt.vlines(mid_x[i]-20, 0, 1944, colors='lightblue', linewidth=1)
+            plt.vlines(mid_x[i]+20, 0, 1944, colors='lightblue', linewidth=1)
+            # 글자 사이의 간격(80px)보다 더 멀리 있을 때
+            if(120 <= abs(mid_x[i] - mid_x[i-1])):
+                plt.vlines(mid_x[i] - 20 - 40, 0, 1944, colors='lightblue', linewidth=1)
+        else:
+            plt.vlines(mid_x[i]-20, 0, 1944, colors='lightblue', linewidth=1)
+            plt.vlines(mid_x[i]+20, 0, 1944, colors='lightblue', linewidth=1)
     else:
-        plt.vlines(mid_x[i]-20, 0, 1944, colors='lightblue', linewidth=1)
-        plt.vlines(mid_x[i]+20, 0, 1944, colors='lightblue', linewidth=1)
-
-
+        if (75 <= abs(mid_x[i + 1] - mid_x[i])):
+            plt.vlines(mid_x[i]-20, 0, 1944, colors='lightblue', linewidth=1)
+            plt.vlines(mid_x[i]+20, 0, 1944, colors='lightblue', linewidth=1)
+            # 글자 사이의 간격(80px)보다 더 멀리 있을 때
+            if(120 <= abs(mid_x[i + 1] - mid_x[i])):
+                plt.vlines(mid_x[i+1] - 20 - 40, 0, 1944, colors='lightblue', linewidth=1)
+        else:
+            plt.vlines(mid_x[i]-20, 0, 1944, colors='lightblue', linewidth=1)
 
 
 print("mid_y : ", mid_y)
 
 # by 김주희_수평선 그리기_201021
-for i in range(1, len(mid_y)):
+for i in range(len(mid_y)):
     plt.hlines(mid_y[i]-20, 0, 2592, colors='lightblue', linewidth=1)
     # plt.hlines(mid_y[i]+20, 0, 2592, colors='lightblue', linewidth=1)
-    if i==len(mid_y)-1:
+    if i == len(mid_y)-1:
         plt.hlines(mid_y[i]+20, 0, 2592, colors='lightblue', linewidth=1)
 
 

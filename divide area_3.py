@@ -3,8 +3,19 @@ import cv2 as cv
 import matplotlib.pyplot as plt
 import math
 from collections import Counter
-
-# 안됨
+from braille import table_kor
+from unicode import join_jamos
+# table_kor = {'ㄱ': '000100', 'ㄴ':'100100', 'ㄷ':'010100', 'ㄹ':'000010', 'ㅁ':'1000010', 'ㅂ':'000110',
+#              'ㅅ':'000001', 'ㅈ':'000101', 'ㅊ':'000011', 'ㅋ':'110100', 'ㅌ':'110010', 'ㅍ':'100110',
+#              'ㅎ':'010110', '된소리':'000001', '_ㄱ':'100000', '_ㄴ':'010010', '_ㄷ':'001010', '_ㄹ':'010000',
+#              '_ㅁ':'010001', '_ㅂ':'110000', '_ㅅ':'001000', '_ㅇ':'011011', '_ㅈ':'101000', '_ㅊ':'011000',
+#              '_ㅋ':'011010', '_ㅌ':'011001', '_ㅍ':'010011', '_ㅎ':'001011', 'ㅆ':'001100',
+#              'ㅏ':'110001', 'ㅑ':'001110', 'ㅓ':'011100', 'ㅕ':'100011', 'ㅗ':'101001', 'ㅛ':'001101','ㅜ':'101100',
+#              'ㅠ':'101100', 'ㅡ':'010101', 'ㅣ':'101010', '_ㅣ':'111010', 'ㅐ':'111010', 'ㅔ':'101110',
+#              'ㅖ':'001100', 'ㅘ':'111001', 'ㅚ':'101111', 'ㅝ':'111100', 'ㅢ':'010111',
+#              '가':'110101', '사':'111000', '억':'100111', '언':'011111', '얼':'011110', '연':'100001',
+#              '열':'110011', '영':'110111', '옥':'101101', '온':'111011', '옹':'111111', '운':'110110',
+#              '울':'111101', '은':'101011', '을':'011101', '인':'111110'}
 
 # 카메라로 사진을 다시 찍어서 실행해봄. 명암이 균일하지 않아서 검출에 힘들었던 사진말고 조금더 명암이 균일한 조건에서 촬영함
 # 조건 : 표지판과 카메라 10cm 거리, 카메라와 표지판이 평행하게 촬영
@@ -20,7 +31,7 @@ from collections import Counter
 # img = cv.imread('./data/e.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/i.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/k.jpg', cv.IMREAD_GRAYSCALE)
-img = cv.imread('./data/m.jpg', cv.IMREAD_GRAYSCALE)
+# img = cv.imread('./data/m.jpg', cv.IMREAD_GRAYSCALE)
 img = cv.imread('./data/n.jpg', cv.IMREAD_GRAYSCALE)
 
 # img_2 = cv.imread('./data/smoking.png')
@@ -30,7 +41,7 @@ img = cv.imread('./data/n.jpg', cv.IMREAD_GRAYSCALE)
 # img_2 = cv.imread('./data/f.jpg')
 # img_2 = cv.imread('./data/e.jpg')
 # img_2 = cv.imread('./data/k.jpg')
-img_2 = cv.imread('./data/m.jpg')
+# img_2 = cv.imread('./data/m.jpg')
 img_2 = cv.imread('./data/n.jpg')
 # img_2 = cv.imread('./data/j.jpg')
 
@@ -111,7 +122,6 @@ for i in range(len(contours)):
 
     # by 김주희_가로 세로의 비율 _200702
     aspect_ratio = float(w)/h
-
 
     # by 김주희_컨투어한 영역의 비율을 보고 사각형을 그림 _200702
     #   점자에 대한 contour를 찾는 과정_가로 세로 비율이 1:1에서 크게 벗어난 것을 제외하고 표시
@@ -247,6 +257,8 @@ center_x.append(0)
 # center_x.insert(0, 0)
 
 print("추가한 center_x : ", center_x)
+print("추가한 center_y : ", center_y)
+
 # by 김주희_y값 기준 만약에 center의 거리가 20px이하이면 카운트 해주고, 값을 더해준다. (나중에 평균 구할 예정) _201019
 for i in range(len(center_y)-1):
     # by 김주희_x값중 쵀대값과 최소값의 중간값 구하기-더해서 나누기2 _201020
@@ -256,10 +268,9 @@ for i in range(len(center_y)-1):
         temp.append(center_x[i])
     else:
         temp.append(center_x[i])
-        mid_x.append(int((min(temp) + max(temp)) / 2))
         sameLevel_x.append(temp)
+        mid_x.append(int((min(temp) + max(temp)) / 2))
         temp = []
-    print("sameLevel_x : ", sameLevel_x)
 
 
     if abs(center_y[i+1] - center_y[i]) <= 20:
@@ -269,147 +280,195 @@ for i in range(len(center_y)-1):
         sameLevel_y.append(temp2)
         mid_y.append(int((min(temp2) + max(temp2)) / 2))
         temp2 = []
-    print("sameLevel_y : ", sameLevel_y)
+
+
+
+# plt.subplot(211)
+# plt.subplot(121)
+plt.imshow(rotation, cmap='gray')
+plt.title('rotate')
+plt.axis('off')
 
 
 print("mid_x : ", mid_x)
 print("mid_y : ", mid_y)
 
-
-# by 김주희_ 중심선을 기준으로 완벽한 점자 중심 라인 그리기 -> 점이 없는 부분도 인식하게._201021
-c = 0
-# # cc = 0
-# for i in range(1, len(center_y)-1):
-#     # by 김주희_x값중 쵀대값과 최소값의 중간값 구하기-더해서 나누기2 _201020
-#     # 중심값의 x값의 차이가 20 이하이면 같은 배열에 대입한다.
-#
-#     if abs(center_x[i+1] - center_x[i]) <= 20:
-#         temp.append(center_x[i])
-#     else:
-#         temp.append(center_x[i])
-#         sameLevel_x.append(temp)
-#         mid_x.append(int((min(temp) + max(temp)) / 2))
-#         temp = []
-#     print("sameLevel_x : ", i, sameLevel_x)
-#
-#
-#     if abs(center_y[i+1] - center_y[i]) <= 20:
-#         temp2.append(center_y[i])
-#     else:
-#         temp2.append(center_y[i])
-#         sameLevel_y.append(temp2)
-#         mid_y.append(int((min(temp2) + max(temp2)) / 2))
-#         temp2 = []
-#     print("sameLevel_y : ", i, sameLevel_y)
-
-# for i in range(1, len(mid_x)-1):
-#     # 첫번째 중심선과 두번째 중심선의 거리가 40범위가 넘어가면 -> 다른 글자라는 의미이므로 앞쪽에 선을 추가한다.
-#     if i == 1 and mid_x[i+1]-mid_x[i] > 50:
-#         d = mid_x[i] - 40
-#         mid_x.insert(i, d)
-#         i = i + 1
-#     # 첫번째 중심선과 두번째 중심선의 거리가 80범위가 넘어가면 -> 첫번째 중심선이 있고 두번 째 중심선이 없다는 뜻.-> 뒷쪽에 선을 추가한다.
-#     if i == 1 and mid_x[i+1]-mid_x[i] > 90:
-#         d = mid_x[i] + 40
-#         mid_x.insert(i, d)
-#         print("d1", d)
-#         print("insert_mid_x : ", mid_x)
-#         i=i+1
-#     # 글자의 첫번 째 선인데 40범위 안에 있으면 완벽함. -> c 값만 1로 설정해주고 넘어감
-#     if c == 0 and mid_x[i+1]-mid_x[i] < 55:
-#         c = 1
-#
-#     if c == 1:
-#         # 두번째 선에서 다음 선이 80범위를 넘어간다면 앞쪽에 선을 추가한다.
-#         if mid_x[i+1]-mid_x[i] > 90:
-#             d = mid_x[i+1] - 40
-#             mid_x.insert(i,d )
-#             print("d2", d)
-#             print("insert_mid_x : ", mid_x)
-#             i=i+1
-#             c == 0
-#     # 만약에 거리가 80범위라면 -> 다른 글자일 떄
-#     # elif mid_x[i+1]-mid_x[i] < 90:
-
-print("area_mid_x : ", mid_x)
-
-
-# # by 김주희_ 중심선의 가장 끝에서부터 2개가 40px정도 차이나면 중심선이 두개가 있다는 뜻 -> 그거를 구분한다. 없다면 그려주고, 있다면 넘어가고_201021
-# # 중심선이 두개라면
-# if 35< mid_x[-1]-mid_x[-2] < 50:
-# else:
-#     # 글자간의 간격넓이라면 -> 두 선중 두번째 선이 없는 경우
-#     if 75< mid_x[-1]-mid_x[-2] <90:
-
-
-#
-# mid_x.append(0)
-# print("mid_x : ", mid_x)
-# # by 김주희_ 점자 영역을 6등분 하기_201020
-# # 한 글자 안에서의 점자 간의 간격은 40px-50px
-# # 글자 사이의 간격은 80px 이상
-# # 간격의 차이를 계산하여 위치 및 빈 공간 추적
-# mid_x.append(0)
-# for i in range(1, len(mid_x)-1):
-#     # 글자간의 간격 일 때 -> 다른 글자 일 떄
-#     if 75 <= mid_x[i+1]-mid_x[i] and mid_x[i+1]-mid_x[i] <= 90:
-#         plt.vlines(mid_x[i] - 10, 0, 1944, colors='blue', linewidth=1)
-
-# by 김주희_ _201020
-# #by 김주희_ _201019
-
-
-
-# plt.subplot(221)
-# plt.subplot(121)
-plt.imshow(rotation, cmap='gray')
-plt.title('roatate')
-plt.axis('off')
-
-# by 김주희_ 중간값 선 그리기  _201020
-for i in range(len(mid_x)):
-    plt.vlines(mid_x[i], 0, 1944, colors='pink', linewidth=1)
-    # plt.vlines(mid_x[i]-10, 0, 1944, colors='blue', linewidth=1)
-    # plt.vlines(mid_x[i]+10, 0, 1944, colors='blue', linewidth=1)
-for i in range(1, len(mid_y)):
-    plt.hlines(mid_y[i], 0, 2592, colors='pink', linewidth=1)
-
-# mid_x.append(0)
-print(" 중심선 그리고 나서 mid_x : ", mid_x)
-    # by 김주희_ 점자 영역을 6등분 하기_201020
-    # 한 글자 안에서의 점자 간의 간격은 40px-50px
-    # 글자 사이의 간격은 80px 이상
-    # 간격의 차이를 계산하여 위치 및 빈 공간 추적
-mid_x.append(0)
-for i in range(len(mid_x) - 1):
-    # # 수직선_글자간의 간격 일 때 -> 다른 글자 일 떄
-    # if (75 <= abs(mid_x[i + 1] - mid_x[i])):
-    #     plt.vlines(mid_x[i]-20, 0, 1944, colors='lightblue', linewidth=1)
-    #     plt.vlines(mid_x[i]+20, 0, 1944, colors='lightblue', linewidth=1)
-    #     # 글자 사이의 간격(80px)보다 더 멀리 있을 때
-    #     if(120 <= abs(mid_x[i + 1] - mid_x[i])):
-    #         plt.vlines(mid_x[i+1] - 20 - 40, 0, 1944, colors='lightblue', linewidth=1)
-    # else:
-    #     plt.vlines(mid_x[i]-20, 0, 1944, colors='lightblue', linewidth=1)
-    if i % 2 == 1:
-        plt.vlines(mid_x[i]-20, 0, 1944, colors='lightblue', linewidth=1)
-    else:
-        plt.vlines(mid_x[i]-20, 0, 1944, colors='lightblue', linewidth=1)
-        plt.vlines(mid_x[i]+20, 0, 1944, colors='lightblue', linewidth=1)
-
-
-
-
-print("mid_y : ", mid_y)
-
 # by 김주희_수평선 그리기_201021
-for i in range(1, len(mid_y)):
+for i in range(len(mid_y)):
     plt.hlines(mid_y[i]-20, 0, 2592, colors='lightblue', linewidth=1)
+    hline.append(mid_y[i]-20)
     # plt.hlines(mid_y[i]+20, 0, 2592, colors='lightblue', linewidth=1)
-    if i==len(mid_y)-1:
+    if i == len(mid_y)-1:
         plt.hlines(mid_y[i]+20, 0, 2592, colors='lightblue', linewidth=1)
+        hline.append(mid_y[i]+20)
+
+# by 배아랑이_점자 영역 구분하는 수직선, 수평선_201023
+hline.sort()
+print("hline : ", hline)
 
 
+braille = []
+count = 0
+mid_x.append(0)
+mid_x.append(0)
+# by 배아랑이_점자 영역 구분_201023
+for i in range(len(mid_x)-2):
+    if 75 <= (mid_x[i + 1] - mid_x[i]):
+        if 120 <= (mid_x[i + 1] - mid_x[i]):
+            if 150 <= (mid_x[i + 1] - mid_x[i]):
+                # 1___1 -> 점자 2개
+                if i != len(mid_x)-3:
+                    braille.append([mid_x[i], mid_x[i]+40])
+            else:
+                # 1__1 -> 점자 2개  -> 2가지 1 _ _1 / 1_ _ 1
+                if 75 <= (mid_x[i+2] - mid_x[i+1]):
+                    if 120 <= (mid_x[i+2] - mid_x[i+1]):
+                        if 150 <= (mid_x[i+2] - mid_x[i+1]):     # 1__1___1
+                            braille.append([mid_x[i], mid_x[i]+40])
+                        else:                                       # 1__1__1
+                            if i != 0:
+                                if 75 <= (mid_x[i] - mid_x[i-1]):
+                                    if 120 <= (mid_x[i+2] - mid_x[i+1]):
+                                        braille.append([])
+                                    else:
+                                        braille.append([mid_x[i], mid_x[i]+40])
+                                else:
+                                    braille.append([mid_x[i-1], mid_x[i]])
+                    else:                                           # 1__1_1
+                        if 75 <= (mid_x[i] - mid_x[i-1]):        # _1__1_1
+                            braille.append([mid_x[i]-40, mid_x[i]])
+                        else:                                       # 11__1_1
+                            braille.append([mid_x[i-1], mid_x[i]])
+                else:                                               # 1__11
+                    braille.append([mid_x[i], mid_x[i]+40])
+        else:
+            # 1_1 -> 점자 2개
+            if i != len(mid_x)-3:
+                if 75 <= (mid_x[i] - mid_x[i-1]):             # _1_1
+                    braille.append([mid_x[i]-40, mid_x[i]])
+                else:                                           # 11_1
+                    braille.append([mid_x[i-1], mid_x[i]])
+            else:                                               # first
+                braille.append([mid_x[i]-40, mid_x[i]])
+    else:
+        # 11 -> 점자 하나
+        if i == len(mid_x)-3:
+            braille.append([mid_x[i-1], mid_x[i]])
+
+
+print("braille", braille)
+
+# mid_x = []
+# mid_y = []
+
+# by 김주희_6등분 선중 수직선 좌표과 저장되어 있응 braille을 이용하여 수직선 그리기 & vline 리스트에 선 좌표 넣_201024
+vvline=[]
+for i in range(len(braille)):
+    plt.vlines(braille[i][0]-20, 0, 1944, colors='lightblue', linewidth=1)
+    plt.vlines(braille[i][1]-20, 0, 1944, colors='lightblue', linewidth=1)
+    plt.vlines(braille[i][1]+20, 0, 1944, colors='lightblue', linewidth=1)
+    vline.append(braille[i][0]-20)
+    vline.append(braille[i][1]-20)
+    vline.append(braille[i][1]+20)
+
+
+print("vline : ", vline)
+
+vline.append(max(vline)+40)
+vline.append(max(vline)+40)
+vline.append(max(vline)+40)
+print("vline : ", vline)
+ro_center.sort()
+print("정렬된 ro_center : ", ro_center)
+binary_code = []   # 점자를 2진수로 변환하여 저장
+b = []
+a= 0
+
+j=0
+for point in ro_center:
+    if (point[0] < max(vline)):
+        if (point[0] > vline[(a+1)*3]) :
+            if point != ro_center[-1]:
+                a = a + 1
+                j = (a)*3
+                binary_code.append(b)
+                b = []
+
+    if (vline[j] <= point[0] <= vline[j + 1]) and (hline[0] <= point[1] <= hline[1]):
+        b.append(0)
+    elif (vline[j] <= point[0] <= vline[j + 1]) and (hline[1] <= point[1] <= hline[2]):
+        b.append(1)
+    elif (vline[j] <= point[0] <= vline[j + 1]) and (hline[2] <= point[1] <= hline[3]):
+        b.append(2)
+    elif (vline[j + 1] <= point[0] <= vline[j + 2]) and (hline[0] <= point[1] <= hline[1]):
+        b.append(3)
+    elif (vline[j + 1] <= point[0] <= vline[j + 2]) and (hline[1] <= point[1] <= hline[2]):
+        b.append(4)
+    elif (vline[j + 1] <= point[0] <= vline[j + 2]) and (hline[2] <= point[1] <= hline[3]):
+        b.append(5)
+
+    print(j)
+
+binary_code.append(b)
+print("binary_code", binary_code)
+# 숫자형 리스트를 문자열로 바꿔 저장하는 변
+kor_d = []
+#by 김주희_점자의 점 위치를 파악한 배열을 이용하여 바이너라 형식으로 변환_201024
+kor_b = np.zeros((len(binary_code), 6),np.int32)
+print("kor_b " ,kor_b)
+for i in range(len(binary_code)):
+    for j in range(len(binary_code[i])):
+        kor_b[i][binary_code[i][j]] = 1
+    a = ''.join(map(str, kor_b[i]))
+    print(" a : " , a)
+    kor_d.append(a)
+    # kor[i] = ''. join(map(str, kor[i]))
+
+    # print(str(int('', join(kor[i]))))
+
+print("str kor " ,kor_b)
+print("kor_d", kor_d)
+
+table_kor_v = {v: k for k, v in table_kor.items()}
+print("table_kor_v : ", table_kor_v)
+
+for i in range(len(kor_d)):
+    print(table_kor_v.get(kor_d[i]))
+
+
+print(join_jamos(""))
+
+if kor_d[0] == '000101':
+    str = "장애인전용"
+if kor_d[0] == '100011':
+    str = "여자화장"
+
+실
+# for i in range(len(vline)):
+#     for j in range(len(hline)):
+#
+# if rotation[vline[0]:vline[1], hline[2]:hline[3]].any():
+#     print('braille')
+# print(rotation[386, 688])
+# print(rotation[402, 827])
+# print(rotation[242, 738])
+
+# print("vline size : ", len(vline))
+# for i in range(len(vline)-1):
+#     for j in range(len(hline)-1):
+#         if (rotation[vline[i]+5:vline[i+1]-5, hline[j]+5:hline[j+1]-5]).any([255,255,255]):
+#             braille.append(1)
+#         else:
+#             braille.append(0)
+#     braille.append([i])
+# print(braille)
+
+# print(vline[11], vline[12], vline[13])
+#
+# if (rotation[vline[11]:vline[12], hline[1]:hline[2]]==[255,255,255]).any():
+#     print('1')
+# else:
+#     print('0')
 
 
 # #
