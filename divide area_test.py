@@ -9,8 +9,8 @@ from unicode import join_jamos
 
 
 
-img = cv.imread('./data/o.jpg')
-img_2 = cv.imread('./data/o.jpg')
+img = cv.imread('./data/n.jpg')
+img_2 = cv.imread('./data/n.jpg')
 
 img = cv.resize(img, (2592, 1944))
 img_2 = cv.resize(img_2, (2592, 1944))
@@ -50,8 +50,8 @@ closing[:, -cut_num[1]:] = 125
 
 plt.subplot(121)
 
-plt.imshow(img, cmap='gray')
-plt.title('img')
+plt.imshow(closing, cmap='gray')
+plt.title('Closing Image')
 plt.axis('off')
 
 
@@ -59,7 +59,7 @@ plt.subplot(122)
 # plt.hlines(center[0][1], 0, 2592, colors='pink', linewidth=1)
 # # plt.hist()
 plt.imshow(y2, cmap='gray')
-plt.title(' y')
+plt.title('Grayscale Image')
 plt.axis('off')
 
 plt.show()

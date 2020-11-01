@@ -49,9 +49,10 @@ closing[:, -cut_num[1]:] = 125
 # 추가
 closing1 = np.array(closing[:, :, 0], dtype=np.uint8)
 # closing1 = 255-closing1
+center=[]
+
 contours, _ = cv.findContours(closing1, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
 
-center=[]
 for i in range(len(contours)):
     cnt = contours[i]
     area = cv.contourArea(cnt)
@@ -88,11 +89,14 @@ angle = ave * (180.0 / math.pi)
 h, w = closing.shape[:2]
 M = cv.getRotationMatrix2D((w/2, h/2), angle, 1)
 rotation = cv.warpAffine(closing, M,(w, h))
+
+
 cnt = Counter(compare_area)
 ro_center = []
 center_x = []
 center_y = []
 contours, A = cv.findContours(rotation[:, :, 0], cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
+
 for i in range(len(contours)):
     cnt = contours[i]
     area = cv.contourArea(cnt)
@@ -223,10 +227,11 @@ vline.append(max(vline)+40)
 vline.append(max(vline)+40)
 vline.append(max(vline)+40)
 ro_center.sort()
+
+
 binary_code = []   # 점자를 2진수로 변환하여 저장
 b = []
 a= 0
-
 j=0
 for point in ro_center:
     if (point[0] < max(vline)):
@@ -252,8 +257,9 @@ for point in ro_center:
 
 
 binary_code.append(b)
-kor_d = []#
 
+
+kor_d = []
 
 kor_b = np.zeros((len(binary_code), 6),np.int32)
 for i in range(len(binary_code)):

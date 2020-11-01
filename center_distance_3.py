@@ -10,12 +10,12 @@ import statistics as st
 # img = cv.imread('./data/smoking.png', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/smoking_2.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/smoking_3.png', cv.IMREAD_GRAYSCALE)
-img = cv.imread('./data/h.jpg', cv.IMREAD_GRAYSCALE)
+img = cv.imread('./data/n.jpg', cv.IMREAD_GRAYSCALE)
 
 # img_2 = cv.imread('./data/smoking.png')
 # img_2 = cv.imread('./data/smoking_2.jpg')
 # img_2 = cv.imread('./data/smoking_3.png')
-img_2 = cv.imread('./data/h.jpg')
+img_2 = cv.imread('./data/n.jpg')
 
 img = img / 255
 img_2 = img_2 / 255

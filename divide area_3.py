@@ -33,7 +33,7 @@ from unicode import join_jamos
 # img = cv.imread('./data/k.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/m.jpg', cv.IMREAD_GRAYSCALE)
 img = cv.imread('./data/n.jpg')
-img = cv.imread('./data/o.jpg')
+# img = cv.imread('./data/o.jpg')
 
 # img_2 = cv.imread('./data/smoking.png')
 # img_2 = cv.imread('./data/smoking_2.jpg')
@@ -43,8 +43,8 @@ img = cv.imread('./data/o.jpg')
 # img_2 = cv.imread('./data/e.jpg')
 # img_2 = cv.imread('./data/k.jpg')
 # img_2 = cv.imread('./data/m.jpg')
-img_2 = cv.imread('./data/o.jpg')
-# img_2 = cv.imread('./data/n.jpg')
+# img_2 = cv.imread('./data/o.jpg')
+img_2 = cv.imread('./data/n.jpg')
 # img_2 = cv.imread('./data/j.jpg')
 
 
@@ -287,9 +287,9 @@ for i in range(len(center_y)-1):
 
 # plt.subplot(211)
 # plt.subplot(121)
-plt.imshow(rotation, cmap='gray')
-plt.title('rotate')
-plt.axis('off')
+# plt.imshow(img_2, cmap='gray')
+# plt.title('Original Image')
+# plt.axis('off')
 
 
 print("mid_x : ", mid_x)
@@ -438,7 +438,7 @@ for i in range(len(kor_d)):
     print(table_kor_v.get(kor_d[i]))
 
 
-print(join_jamos(""))
+# print(join_jamos(""))
 
 if kor_d[0] == '000101':
     str = "장애인전용"
@@ -508,5 +508,7 @@ if kor_d[0] == '100011':
 # plt.imshow(img, cmap='gray')
 # plt.title('original image')
 # plt.axis('off')
-
+plt.imshow(rotation)
+plt.title('rotation Image')
+plt.axis('off')
 plt.show()
