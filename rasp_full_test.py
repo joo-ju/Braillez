@@ -32,8 +32,10 @@ from unicode import join_jamos
 # img = cv.imread('./data/i.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/k.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/m.jpg', cv.IMREAD_GRAYSCALE)
-img = cv.imread('./data/n.jpg')
+# img = cv.imread('./data/n.jpg',cv.IMREAD_GRAYSCALE)
+# img = cv.imread('./data/n.jpg')
 # img = cv.imread('./data/o.jpg')
+img = cv.imread('./data/aa.jpg')
 
 # img_2 = cv.imread('./data/smoking.png')
 # img_2 = cv.imread('./data/smoking_2.jpg')
@@ -44,19 +46,31 @@ img = cv.imread('./data/n.jpg')
 # img_2 = cv.imread('./data/k.jpg')
 # img_2 = cv.imread('./data/m.jpg')
 # img_2 = cv.imread('./data/o.jpg')
-img_2 = cv.imread('./data/n.jpg')
+# img_2 = cv.imread('./data/n.jpg')
 # img_2 = cv.imread('./data/j.jpg')
+img_2 = cv.imread('./data/aa.jpg')
 
 
 # by 김주희_이미지 사이즈 변경_201020
 img = cv.resize(img, (2592, 1944))
 img_2 = cv.resize(img_2, (2592, 1944))
 
+# 커널 생성(대상이 있는 픽셀을 강조)
+kernel = np.array([[0, -1, 0],
+                   [-1, 5, -1],
+                   [0, -1, 0]])
+kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
+
+# 커널 적용
+img_A = cv.filter2D(img, -1, kernel)
+# image_enhanced = cv.equalizeHist(img)
+test_img = img.copy()
+test_img2 = img_A.copy()
 
 # 컨투어 영역의 넓이 중 최빈값으 구하기 위한 배
 compare_area = []
 
-yuv = cv.cvtColor(img_2, cv.COLOR_BGR2YUV)
+yuv = cv.cvtColor(img_A, cv.COLOR_BGR2YUV)
 
 y = yuv[:, :, 0]
 
@@ -93,12 +107,13 @@ print(thr.shape)
 kernel = np.ones((3, 3), np.uint8)
 closing = cv.morphologyEx(thr, cv.MORPH_CLOSE, kernel)
 
+
 # by 배아랑이_201012
 # 이미지의 가장자리 일정 부분은 하얗게 만든다. -> 그림 잘라 버리기
 # 그림의 가로세로 길이의 8분의 1 정도만 가장자리를 검게 바꿔준다.
 cut_num = [(int)(closing.shape[0]/8), (int)(closing.shape[1]/8)]
 print(cut_num)
-closing[:cut_num[0], :] = 125
+closing[:cut_num[0]*2, :] = 125
 closing[-cut_num[0]:, :] = 125
 closing[:, :cut_num[1]] = 125
 closing[:, -cut_num[1]:] = 125
@@ -132,7 +147,7 @@ for i in range(len(contours)):
     # cv.rectangle(closing, (x, y), (x + w, y + h), (0, 127, 127), 10)
     if (aspect_ratio > 0.8) and (aspect_ratio < 1.2):
         # 크기가 10픽셀 이하인 것은 모두 없애기._201012
-        if (w > 5) and (w < 25):
+        if (w > 10) and (w < 45):
             cv.rectangle(closing, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cx = int(x + w/2)
             cy = int(y + h/2)
@@ -479,12 +494,12 @@ index_char = []
 #             string.insert(i,'ㅇ')
 
 j = 0
-for i in range(len(kor_d)):
-
-    s = table_kor_v.get(kor_d[i])
-    print(table_kor_v.get(kor_d[i]))
-    string.append(s)
-    index_char.append(list_char.index(s))
+# for i in range(len(kor_d)):
+#
+#     s = table_kor_v.get(kor_d[i])
+#     print(table_kor_v.get(kor_d[i]))
+#     string.append(s)
+#     index_char.append(list_char.index(s))
 
     # by 김주희_받침인 경우 _없애기 _201101
 
@@ -643,7 +658,21 @@ if kor_d[0] == '100011':
 # plt.imshow(img, cmap='gray')
 # plt.title('original image')
 # plt.axis('off')
+plt.subplot(221)
 plt.imshow(rotation)
 plt.title('rotation Image')
 plt.axis('off')
+plt.subplot(222)
+plt.imshow(test_img)
+plt.title('test_img Image')
+plt.axis('off')
+plt.subplot(223)
+plt.imshow(y2)
+plt.title('y2 Image')
+plt.axis('off')
+# plt.subplot(224)
+# plt.imshow(image_enhanced)
+# plt.title('image_enhanced Image')
+# plt.axis('off')
+
 plt.show()

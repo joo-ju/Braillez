@@ -32,6 +32,7 @@ from unicode import join_jamos
 # img = cv.imread('./data/i.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/k.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/m.jpg', cv.IMREAD_GRAYSCALE)
+# img = cv.imread('./data/n.jpg',cv.IMREAD_GRAYSCALE)
 img = cv.imread('./data/n.jpg')
 # img = cv.imread('./data/o.jpg')
 
@@ -52,6 +53,17 @@ img_2 = cv.imread('./data/n.jpg')
 img = cv.resize(img, (2592, 1944))
 img_2 = cv.resize(img_2, (2592, 1944))
 
+# 커널 생성(대상이 있는 픽셀을 강조)
+kernel = np.array([[0, -1, 0],
+                   [-1, 5, -1],
+                   [0, -1, 0]])
+kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
+
+# 커널 적용
+img_A = cv.filter2D(img, -1, kernel)
+# image_enhanced = cv.equalizeHist(img)
+test_img = img.copy()
+test_img2 = img_A.copy()
 
 # 컨투어 영역의 넓이 중 최빈값으 구하기 위한 배
 compare_area = []
@@ -92,6 +104,7 @@ print(thr.shape)
 
 kernel = np.ones((3, 3), np.uint8)
 closing = cv.morphologyEx(thr, cv.MORPH_CLOSE, kernel)
+
 
 # by 배아랑이_201012
 # 이미지의 가장자리 일정 부분은 하얗게 만든다. -> 그림 잘라 버리기
@@ -643,7 +656,21 @@ if kor_d[0] == '100011':
 # plt.imshow(img, cmap='gray')
 # plt.title('original image')
 # plt.axis('off')
+plt.subplot(221)
 plt.imshow(rotation)
 plt.title('rotation Image')
 plt.axis('off')
+plt.subplot(222)
+plt.imshow(test_img)
+plt.title('test_img Image')
+plt.axis('off')
+plt.subplot(223)
+plt.imshow(test_img2)
+plt.title('test_img2 Image')
+plt.axis('off')
+# plt.subplot(224)
+# plt.imshow(image_enhanced)
+# plt.title('image_enhanced Image')
+# plt.axis('off')
+
 plt.show()
