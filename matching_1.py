@@ -32,7 +32,8 @@ from unicode import join_jamos
 # img = cv.imread('./data/i.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/k.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/m.jpg', cv.IMREAD_GRAYSCALE)
-img = cv.imread('./data/n.jpg')
+# img = cv.imread('./data/n.jpg')
+img = cv.imread('./data/ac.jpg')
 # img = cv.imread('./data/o.jpg')
 
 # img_2 = cv.imread('./data/smoking.png')
@@ -44,7 +45,7 @@ img = cv.imread('./data/n.jpg')
 # img_2 = cv.imread('./data/k.jpg')
 # img_2 = cv.imread('./data/m.jpg')
 # img_2 = cv.imread('./data/o.jpg')
-img_2 = cv.imread('./data/n.jpg')
+img_2 = cv.imread('./data/ac.jpg')
 # img_2 = cv.imread('./data/j.jpg')
 
 
@@ -130,9 +131,9 @@ for i in range(len(contours)):
     # if(aspect_ratio>0.8)and(aspect_ratio<1.5)and(f <= float(f)*0.7):
 
     # cv.rectangle(closing, (x, y), (x + w, y + h), (0, 127, 127), 10)
-    if (aspect_ratio > 0.8) and (aspect_ratio < 1.2):
+    if (aspect_ratio > 0.5) and (aspect_ratio < 1.5):
         # 크기가 10픽셀 이하인 것은 모두 없애기._201012
-        if (w > 5) and (w < 25):
+        if (w > 30) and (w < 65):
             cv.rectangle(closing, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cx = int(x + w/2)
             cy = int(y + h/2)
@@ -210,9 +211,9 @@ for i in range(len(contours)):
     # if(aspect_ratio>0.8)and(aspect_ratio<1.5)and(f <= float(f)*0.7):
 
     # cv.rectangle(closing, (x, y), (x + w, y + h), (0, 127, 127), 10)
-    if (aspect_ratio > 0.8) and (aspect_ratio < 1.2):
+    if (aspect_ratio > 0.5) and (aspect_ratio < 1.5):
         # 크기가 10픽셀 이하인 것은 모두 없애기._201012
-        if (w > 5) and (w < 25):
+        if (w > 30) and (w < 65):
             cv.rectangle(rotation, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cx = int(x + w/2)
             cy = int(y + h/2)

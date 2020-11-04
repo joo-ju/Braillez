@@ -33,8 +33,10 @@ from unicode import join_jamos
 # img = cv.imread('./data/k.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/m.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/n.jpg',cv.IMREAD_GRAYSCALE)
-img = cv.imread('./data/n.jpg')
+# img = cv.imread('./data/n.jpg')
 # img = cv.imread('./data/o.jpg')
+img = cv.imread('./data/ac.jpg')
+# img = cv.imread('./data/ad.jpg')
 
 # img_2 = cv.imread('./data/smoking.png')
 # img_2 = cv.imread('./data/smoking_2.jpg')
@@ -45,8 +47,10 @@ img = cv.imread('./data/n.jpg')
 # img_2 = cv.imread('./data/k.jpg')
 # img_2 = cv.imread('./data/m.jpg')
 # img_2 = cv.imread('./data/o.jpg')
-img_2 = cv.imread('./data/n.jpg')
+# img_2 = cv.imread('./data/n.jpg')
 # img_2 = cv.imread('./data/j.jpg')
+img_2 = cv.imread('./data/ac.jpg')
+# img_2 = cv.imread('./data/ad.jpg')
 
 
 # by 김주희_이미지 사이즈 변경_201020
@@ -143,9 +147,9 @@ for i in range(len(contours)):
     # if(aspect_ratio>0.8)and(aspect_ratio<1.5)and(f <= float(f)*0.7):
 
     # cv.rectangle(closing, (x, y), (x + w, y + h), (0, 127, 127), 10)
-    if (aspect_ratio > 0.8) and (aspect_ratio < 1.2):
+    if (aspect_ratio > 0.8) and (aspect_ratio < 1.5):
         # 크기가 10픽셀 이하인 것은 모두 없애기._201012
-        if (w > 5) and (w < 25):
+        if (w > 30) and (w < 55):
             cv.rectangle(closing, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cx = int(x + w/2)
             cy = int(y + h/2)
@@ -223,9 +227,9 @@ for i in range(len(contours)):
     # if(aspect_ratio>0.8)and(aspect_ratio<1.5)and(f <= float(f)*0.7):
 
     # cv.rectangle(closing, (x, y), (x + w, y + h), (0, 127, 127), 10)
-    if (aspect_ratio > 0.8) and (aspect_ratio < 1.2):
+    if (aspect_ratio > 0.8) and (aspect_ratio < 1.5):
         # 크기가 10픽셀 이하인 것은 모두 없애기._201012
-        if (w > 5) and (w < 25):
+        if (w > 30) and (w < 55):
             cv.rectangle(rotation, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cx = int(x + w/2)
             cy = int(y + h/2)
@@ -586,12 +590,12 @@ print(str_full)
 
 
 
-print(join_jamos(str_full))
-
-if kor_d[0] == '000101':
-    str = "장애인전용"
-if kor_d[0] == '100011':
-    str = "여자화장실"
+# print(join_jamos(str_full))
+#
+# if kor_d[0] == '000101':
+#     str = "장애인전용"
+# if kor_d[0] == '100011':
+#     str = "여자화장실"
 
 
 # for i in range(len(vline)):
@@ -657,12 +661,13 @@ if kor_d[0] == '100011':
 # plt.title('original image')
 # plt.axis('off')
 plt.subplot(221)
+# plt.imshow(rotation)
 plt.imshow(rotation)
 plt.title('rotation Image')
 plt.axis('off')
 plt.subplot(222)
-plt.imshow(test_img)
-plt.title('test_img Image')
+plt.imshow(closing)
+plt.title('closing Image')
 plt.axis('off')
 plt.subplot(223)
 plt.imshow(test_img2)

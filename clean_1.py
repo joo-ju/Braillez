@@ -2,7 +2,6 @@ import numpy as np
 import cv2 as cv
 import matplotlib.pyplot as plt
 import math
-from collections import Counter
 from braille import table_kor
 from unicode import join_jamos
 
@@ -20,7 +19,8 @@ from unicode import join_jamos
 # imgBGR = cv.imread('./data/k.jpg')
 # imgBGR = cv.imread('./data/m.jpg')
 # imgBGR = cv.imread('./data/o.jpg')
-imgBGR = cv.imread('./data/n.jpg')
+# imgBGR = cv.imread('./data/n.jpg')
+imgBGR = cv.imread('./data/ab.jpg')
 # imgBGR = cv.imread('./data/j.jpg')
 
 

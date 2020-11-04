@@ -33,9 +33,9 @@ from unicode import join_jamos
 # img = cv.imread('./data/k.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/m.jpg', cv.IMREAD_GRAYSCALE)
 # img = cv.imread('./data/n.jpg',cv.IMREAD_GRAYSCALE)
-# img = cv.imread('./data/n.jpg')
+img = cv.imread('./data/n.jpg')
 # img = cv.imread('./data/o.jpg')
-img = cv.imread('./data/aa.jpg')
+# img = cv.imread('./data/ab.jpg')
 
 # img_2 = cv.imread('./data/smoking.png')
 # img_2 = cv.imread('./data/smoking_2.jpg')
@@ -46,9 +46,9 @@ img = cv.imread('./data/aa.jpg')
 # img_2 = cv.imread('./data/k.jpg')
 # img_2 = cv.imread('./data/m.jpg')
 # img_2 = cv.imread('./data/o.jpg')
-# img_2 = cv.imread('./data/n.jpg')
+img_2 = cv.imread('./data/n.jpg')
 # img_2 = cv.imread('./data/j.jpg')
-img_2 = cv.imread('./data/aa.jpg')
+# img_2 = cv.imread('./data/ab.jpg')
 
 
 # by 김주희_이미지 사이즈 변경_201020
