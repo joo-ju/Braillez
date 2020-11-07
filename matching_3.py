@@ -191,8 +191,7 @@ dy = center[-2][1] - center[-1][1]
 dx2 = center[0][0] - center[5][0]
 dy2 = center[0][1] - center[5][1]
 
-print('dx', dx)
-print('dy', dy)
+
 print('dx2', dx2)
 print('dy2', dy2)
 
